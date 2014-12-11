@@ -27,7 +27,9 @@ public class basicCube {
         geom.setLocalTranslation(new Vector3f(cords[0],cords[1],cords[2]));
         Material mat = new Material(assetManager,
           "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
+        mat.setTexture("ColorMap", 
+            assetManager.loadTexture("Textures/testTexture.jpg"));
+        //mat.setColor("Color", ColorRGBA.Blue);
         geom.setMaterial(mat);
     }
 
