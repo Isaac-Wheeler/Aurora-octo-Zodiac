@@ -15,9 +15,10 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 
 /**
- * test
+ * code testing
  *
- * @author normenhansen
+ * @author normenhansen mage_dragon
+ * @version 12.13.14
  */
 public class Main extends SimpleApplication {
 
@@ -29,30 +30,32 @@ public class Main extends SimpleApplication {
     Boolean isRunning = true;
 
     @Override
-    @SuppressWarnings("empty-statement")
     public void simpleInitApp() {
-        float[] size = {1, 1, 1};
-        float[] cords = {1, 1, 1};
+        float[] cords = {0.5f, 0.5f, 0.5f};
 
-        basicCube cube1 = new basicCube(cords, size, assetManager);
+        basicCube cube1 = new basicCube(cords, ColorRGBA.Blue, assetManager);
 
-        cords[1] = -1;
+        cords[1] = -.5f;
 
-        basicCube cube2 = new basicCube(cords, size, assetManager);
+        AmourCube amour1 = new AmourCube(cords, assetManager);
 
-        cords[0] = -1;
+        cords[0] = -.5f;
 
-        basicCube cube3 = new basicCube(cords, size, assetManager);
+        basicCube cube2 = new basicCube(cords, ColorRGBA.randomColor(), assetManager);
 
-        rootNode.attachChild(cube1.getGeom());
-        rootNode.attachChild(cube2.getGeom());
-        rootNode.attachChild(cube3.getGeom());
+        float[] cords2 = {0.5f,0.5f,0.5f};
+        
+        ship testShip = new ship(rootNode, cords2);
 
-        Box b = new Box(1, 1, 1);
-        player = new Geometry("Player", b);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        player.setMaterial(mat);
+        testShip.addBlock(cube1.getGeom());
+        testShip.addBlock(amour1.getGeom());
+        testShip.addBlock(cube2.getGeom());
+        
+        testShip.updateShip();
+        
+        float[] cords1 = {1.5f,1.5f,.5f};
+        AmourCube amour2 = new AmourCube(cords2, assetManager);
+        player = amour2.getGeom();
         rootNode.attachChild(player);
         initKeys();
     }
