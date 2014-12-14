@@ -17,6 +17,7 @@ public class ship {
     private Node rootNode;
     
     public ship(Node rootNode, float[] cords){
+        shipBlocks= new ArrayList<Geometry>();
         this.rootNode = rootNode;
         pivot = new Node("pivot");
         pivot.setLocalTranslation(new Vector3f(cords[0],cords[1],cords[2]));
