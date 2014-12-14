@@ -28,6 +28,7 @@ public class Main extends SimpleApplication {
     }
     protected Geometry player;
     Boolean isRunning = true;
+    ship testShip;
 
     @Override
     public void simpleInitApp() {
@@ -43,9 +44,9 @@ public class Main extends SimpleApplication {
 
         basicCube cube2 = new basicCube(cords, ColorRGBA.randomColor(), assetManager);
 
-        float[] cords2 = {0.5f,0.5f,0.5f};
+        float[] cords1 = {0,0,0};
         
-        ship testShip = new ship(rootNode, cords2);
+        testShip = new ship(rootNode, cords1);
 
         testShip.addBlock(cube1.getGeom());
         testShip.addBlock(amour1.getGeom());
@@ -53,7 +54,7 @@ public class Main extends SimpleApplication {
         
         testShip.updateShip();
         
-        float[] cords1 = {1.5f,1.5f,.5f};
+        float[] cords2 = {1.5f,1.5f,.5f};
         AmourCube amour2 = new AmourCube(cords2, assetManager);
         player = amour2.getGeom();
         rootNode.attachChild(player);
@@ -96,7 +97,7 @@ public class Main extends SimpleApplication {
         public void onAnalog(String name, float value, float tpf) {
             if (isRunning) {
                 if (name.equals("Rotate")) {
-                    player.rotate(0, value * speed, 0);
+                    testShip.rotateShip(0, value * speed, 0);
                 }
                 if (name.equals("Right")) {
                     Vector3f v = player.getLocalTranslation();

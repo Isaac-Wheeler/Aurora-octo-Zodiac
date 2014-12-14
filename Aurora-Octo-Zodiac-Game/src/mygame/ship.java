@@ -33,4 +33,8 @@ public class ship {
     public void addBlock(Geometry block){
         shipBlocks.add(block);
     }
+    
+    public void rotateShip(float x, float y, float z){
+        pivot.rotate(x, y, z);
+    }
 }
