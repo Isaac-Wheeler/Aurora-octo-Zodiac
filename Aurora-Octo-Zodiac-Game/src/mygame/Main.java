@@ -76,23 +76,14 @@ public class Main extends SimpleApplication {
      */
     private void initKeys() {
         // You can map one or several inputs to one named action
-        inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_J));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_K));
         inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE),
                 new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         // Add the names to the action listener.
-        inputManager.addListener(actionListener, "Pause");
         inputManager.addListener(analogListener, "Left", "Right", "Rotate");
 
     }
-    private ActionListener actionListener = new ActionListener() {
-        public void onAction(String name, boolean keyPressed, float tpf) {
-            if (name.equals("Pause") && !keyPressed) {
-                isRunning = !isRunning;
-            }
-        }
-    };
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
             if (isRunning) {
