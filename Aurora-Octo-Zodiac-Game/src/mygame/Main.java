@@ -1,15 +1,12 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -54,10 +51,6 @@ public class Main extends SimpleApplication {
         
         testShip.updateShip();
         
-        float[] cords2 = {1.5f,1.5f,.5f};
-        AmourCube amour2 = new AmourCube(cords2, assetManager);
-        player = amour2.getGeom();
-        rootNode.attachChild(player);
         initKeys();
     }
 
@@ -77,7 +70,8 @@ public class Main extends SimpleApplication {
     private void initKeys() {
         // You can map one or several inputs to one named action
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_J));
-        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_K));
+        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_L));
+        inputManager.addMapping("Forward", new KeyTrigger(KeyInput.KEY_I));
         inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE),
                 new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         // Add the names to the action listener.
@@ -91,12 +85,13 @@ public class Main extends SimpleApplication {
                     testShip.rotateShip(0, value * speed, 0);
                 }
                 if (name.equals("Right")) {
-                    Vector3f v = player.getLocalTranslation();
-                    player.setLocalTranslation(v.x + value * speed, v.y, v.z);
+                    testShip.moveRight(speed, value);
                 }
                 if (name.equals("Left")) {
-                    Vector3f v = player.getLocalTranslation();
-                    player.setLocalTranslation(v.x - value * speed, v.y, v.z);
+                   testShip.moveRight(speed, value);
+                }
+                if(name.equals("Forward")){
+                    testShip.moveForward(speed, value);
                 }
             } else {
                 System.out.println("Press P to unpause.");

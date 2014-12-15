@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 /**
  *
+ * hanles a ship
+ * 
  * @author IsaacWheeler
  */
 public class ship {
@@ -16,6 +18,11 @@ public class ship {
     private Node pivot;
     private Node rootNode;
     
+    /**
+     * intiliss the ship class
+     * @param rootNode the display node of the game
+     * @param cords the starting location of the ship center point
+     */
     public ship(Node rootNode, float[] cords){
         shipBlocks= new ArrayList<Geometry>();
         this.rootNode = rootNode;
@@ -36,5 +43,20 @@ public class ship {
     
     public void rotateShip(float x, float y, float z){
         pivot.rotate(x, y, z);
+    }
+    
+    public void moveRight(float speed, float value){
+        Vector3f v = pivot.getLocalTranslation();
+        pivot.move(v.x + value * speed, v.y, v.z);
+    }
+    
+    public void moveleft(float speed, float value){
+        Vector3f v = pivot.getLocalTranslation();
+        pivot.move(v.x - value * speed, v.y, v.z);
+    }
+    
+    public void moveForward(float speed, float value){
+        Vector3f v = pivot.getLocalTranslation();
+        pivot.move(v.x , v.y, v.z + value * speed);
     }
 }
