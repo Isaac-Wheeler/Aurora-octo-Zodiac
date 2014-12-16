@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -88,7 +89,7 @@ public class Main extends SimpleApplication {
                     testShip.moveRight(speed, value);
                 }
                 if (name.equals("Left")) {
-                   testShip.moveRight(speed, value);
+                   testShip.moveLeft(speed, value);
                 }
                 if(name.equals("Forward")){
                     testShip.moveForward(speed, value);
@@ -98,4 +99,15 @@ public class Main extends SimpleApplication {
             }
         }
     };
+        /** A centred plus sign to help the player aim. */
+        protected void initCrossHairs() {
+            setDisplayStatView(false);
+            guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+            BitmapText ch = new BitmapText(guiFont, false);
+            ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+            ch.setText("+"); // crosshairs
+            ch.setLocalTranslation( // center
+            settings.getWidth() / 2 - ch.getLineWidth()/2, settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
+            guiNode.attachChild(ch);
+        }
 }

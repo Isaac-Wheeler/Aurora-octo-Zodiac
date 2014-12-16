@@ -47,12 +47,12 @@ public class ship {
     
     public void moveRight(float speed, float value){
         Vector3f v = pivot.getLocalTranslation();
-        pivot.move(v.x + value * speed, v.y, v.z);
+        pivot.move(v.x + value, v.y, v.z);
     }
     
-    public void moveleft(float speed, float value){
+    public void moveLeft(float speed, float value){
         Vector3f v = pivot.getLocalTranslation();
-        pivot.move(v.x - value * speed, v.y, v.z);
+        pivot.move(v.x - value, v.y, v.z);
     }
     
     public void moveForward(float speed, float value){
