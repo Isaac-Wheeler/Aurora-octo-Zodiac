@@ -30,6 +30,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        initCrossHairs();
         float[] cords = {0.5f, 0.5f, 0.5f};
 
         basicCube cube1 = new basicCube(cords, ColorRGBA.Blue, assetManager);
