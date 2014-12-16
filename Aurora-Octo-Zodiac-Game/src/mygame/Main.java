@@ -1,16 +1,20 @@
 package mygame;
 
-import com.jme3.app.SimpleApplication;
-import com.jme3.font.BitmapText;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
+import com.jme3.input.controls.AnalogListener;
+import com.jme3.app.SimpleApplication;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 
 /**
  * code testing
@@ -74,11 +78,13 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_J));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_L));
         inputManager.addMapping("Forward", new KeyTrigger(KeyInput.KEY_I));
-        inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE),
-                new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE));
         // Add the names to the action listener.
         inputManager.addListener(analogListener, "Left", "Right", "Rotate");
-
+        inputManager.addMapping("Shoot",
+        new KeyTrigger(KeyInput.KEY_SPACE), // trigger 1: spacebar
+        new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
+        inputManager.addListener(actionListener, "Shoot");
     }
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
@@ -111,4 +117,41 @@ public class Main extends SimpleApplication {
             settings.getWidth() / 2 - ch.getLineWidth()/2, settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
             guiNode.attachChild(ch);
         }
+        /** Defining the "Shoot" action: Determine what was hit and how to respond. */
+    private ActionListener actionListener = new ActionListener() {
+ 
+    public void onAction(String name, boolean keyPressed, float tpf) {
+      if (name.equals("Shoot") && !keyPressed) {
+        // 1. Reset results list.
+        CollisionResults results = new CollisionResults();
+        // 2. Aim the ray from cam loc to cam direction.
+        Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+        // 3. Collect intersections between Ray and Shootables in results list.
+        testShip.getPivot().collideWith(ray, results);
+        // 4. Print the results
+        System.out.println("----- Collisions? " + results.size() + "-----");
+        for (int i = 0; i < results.size(); i++) {
+          // For each hit, we know distance, impact point, name of geometry.
+          float dist = results.getCollision(i).getDistance();
+          Vector3f pt = results.getCollision(i).getContactPoint();
+          String hit = results.getCollision(i).getGeometry().getName();
+          System.out.println("* Collision #" + i);
+          System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+        }
+        // 5. Use the results (we mark the hit object)
+        if (results.size() > 0) {
+          // The closest collision point is what was truly hit:
+          CollisionResult closest = results.getClosestCollision();
+          Vector3f cords = closest.getContactPoint();
+          float[] cord = {cords.x + 0.5f, cords.y + 0.5f, cords.z + 0.5f};
+          // Let's interact - we mark the hit with a red dot.
+          basicCube cube2 = new basicCube(cord, ColorRGBA.randomColor(), assetManager);
+          testShip.addBlock(cube2.getGeom());
+          testShip.updateShip();
+        } else {
+         
+        }
+      }
+    }
+  };
 }

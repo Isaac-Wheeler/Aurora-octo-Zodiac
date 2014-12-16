@@ -31,6 +31,10 @@ public class ship {
         this.rootNode.attachChild(pivot);
     }
     
+    public Node getPivot(){
+        return pivot;
+    }
+    
     public void updateShip(){
         for(int i = 0; i < shipBlocks.size(); i++){
             pivot.attachChild(shipBlocks.get(i));
