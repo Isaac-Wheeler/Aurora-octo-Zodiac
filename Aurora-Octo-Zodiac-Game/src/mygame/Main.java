@@ -47,16 +47,16 @@ public class Main extends SimpleApplication {
 
         basicCube cube2 = new basicCube(cords, ColorRGBA.randomColor(), assetManager);
 
-        float[] cords1 = {0,0,0};
-        
+        float[] cords1 = {0, 0, 0};
+
         testShip = new ship(rootNode, cords1);
 
         testShip.addBlock(cube1.getGeom());
         testShip.addBlock(amour1.getGeom());
         testShip.addBlock(cube2.getGeom());
-        
+
         testShip.updateShip();
-        
+
         initKeys();
     }
 
@@ -82,8 +82,8 @@ public class Main extends SimpleApplication {
         // Add the names to the action listener.
         inputManager.addListener(analogListener, "Left", "Right", "Rotate");
         inputManager.addMapping("Shoot",
-        new KeyTrigger(KeyInput.KEY_SPACE), // trigger 1: spacebar
-        new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
+                new KeyTrigger(KeyInput.KEY_SPACE), // trigger 1: spacebar
+                new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
         inputManager.addListener(actionListener, "Shoot");
     }
     private AnalogListener analogListener = new AnalogListener() {
@@ -96,9 +96,9 @@ public class Main extends SimpleApplication {
                     testShip.moveRight(speed, value);
                 }
                 if (name.equals("Left")) {
-                   testShip.moveLeft(speed, value);
+                    testShip.moveLeft(speed, value);
                 }
-                if(name.equals("Forward")){
+                if (name.equals("Forward")) {
                     testShip.moveForward(speed, value);
                 }
             } else {
@@ -106,52 +106,73 @@ public class Main extends SimpleApplication {
             }
         }
     };
-        /** A centred plus sign to help the player aim. */
-        protected void initCrossHairs() {
-            setDisplayStatView(false);
-            guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-            BitmapText ch = new BitmapText(guiFont, false);
-            ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-            ch.setText("+"); // crosshairs
-            ch.setLocalTranslation( // center
-            settings.getWidth() / 2 - ch.getLineWidth()/2, settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
-            guiNode.attachChild(ch);
-        }
-        /** Defining the "Shoot" action: Determine what was hit and how to respond. */
-    private ActionListener actionListener = new ActionListener() {
- 
-    public void onAction(String name, boolean keyPressed, float tpf) {
-      if (name.equals("Shoot") && !keyPressed) {
-        // 1. Reset results list.
-        CollisionResults results = new CollisionResults();
-        // 2. Aim the ray from cam loc to cam direction.
-        Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-        // 3. Collect intersections between Ray and Shootables in results list.
-        testShip.getPivot().collideWith(ray, results);
-        // 4. Print the results
-        System.out.println("----- Collisions? " + results.size() + "-----");
-        for (int i = 0; i < results.size(); i++) {
-          // For each hit, we know distance, impact point, name of geometry.
-          float dist = results.getCollision(i).getDistance();
-          Vector3f pt = results.getCollision(i).getContactPoint();
-          String hit = results.getCollision(i).getGeometry().getName();
-          System.out.println("* Collision #" + i);
-          System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
-        }
-        // 5. Use the results (we mark the hit object)
-        if (results.size() > 0) {
-          // The closest collision point is what was truly hit:
-          CollisionResult closest = results.getClosestCollision();
-          Vector3f cords = closest.getContactPoint();
-          float[] cord = {cords.x + 0.5f, cords.y + 0.5f, cords.z + 0.5f};
-          // Let's interact - we mark the hit with a red dot.
-          basicCube cube2 = new basicCube(cord, ColorRGBA.randomColor(), assetManager);
-          testShip.addBlock(cube2.getGeom());
-          testShip.updateShip();
-        } else {
-         
-        }
-      }
+
+    /**
+     * A centred plus sign to help the player aim.
+     */
+    protected void initCrossHairs() {
+        setDisplayStatView(false);
+        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+"); // crosshairs
+        ch.setLocalTranslation( // center
+                settings.getWidth() / 2 - ch.getLineWidth() / 2, settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        guiNode.attachChild(ch);
     }
-  };
+    /**
+     * Defining the "Shoot" action: Determine what was hit and how to respond.
+     */
+    private ActionListener actionListener = new ActionListener() {
+        public void onAction(String name, boolean keyPressed, float tpf) {
+            if (name.equals("Shoot") && !keyPressed) {
+                // 1. Reset results list.
+                CollisionResults results = new CollisionResults();
+                // 2. Aim the ray from cam loc to cam direction.
+                Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+                // 3. Collect intersections between Ray and Shootables in results list.
+                testShip.getPivot().collideWith(ray, results);
+                // 4. Print the results
+                System.out.println("----- Collisions? " + results.size() + "-----");
+                for (int i = 0; i < results.size(); i++) {
+                    // For each hit, we know distance, impact point, name of geometry.
+                    float dist = results.getCollision(i).getDistance();
+                    Vector3f pt = results.getCollision(i).getContactPoint();
+                    String hit = results.getCollision(i).getGeometry().getName();
+                    System.out.println("* Collision #" + i);
+                    System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+                }
+                // 5. Use the results (we mark the hit object)
+                if (results.size() > 0) {
+                    // The closest collision point is what was truly hit:
+                    CollisionResult closest = results.getClosestCollision();
+                    Vector3f cords = closest.getContactPoint();
+                    float[] cord = {cords.x, cords.y, cords.z};
+                    //detects which side the block is on -Isaac
+                    if (cord[0] > closest.getGeometry().getLocalTranslation().x
+                            || cord[0] < closest.getGeometry().getLocalTranslation().x) {
+                    
+                        //add code for placing block on X side of last block
+                        
+                    } else if (cord[1] > closest.getGeometry().getLocalTranslation().y
+                            || cord[1] < closest.getGeometry().getLocalTranslation().y) {
+                    
+                        //add code for placing block on Y side of last block
+                        
+                    }else if (cord[2] > closest.getGeometry().getLocalTranslation().z 
+                            || cord[2] < closest.getGeometry().getLocalTranslation().z ){
+                        
+                        //add cod for placing block on Z side of last block
+                    }
+                    
+
+                    // Let's interact - we mark the hit with a red dot.
+                    basicCube cube2 = new basicCube(cord, ColorRGBA.randomColor(), assetManager);
+                    testShip.addBlock(cube2.getGeom());
+                    testShip.updateShip();
+                } else {
+                }
+            }
+        }
+    };
 }
