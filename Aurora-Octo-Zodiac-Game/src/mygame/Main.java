@@ -149,27 +149,50 @@ public class Main extends SimpleApplication {
                     Vector3f cords = closest.getContactPoint();
                     float[] cord = {cords.x, cords.y, cords.z};
                     //detects which side the block is on -Isaac
-                    if (cord[0] > closest.getGeometry().getLocalTranslation().x
-                            || cord[0] < closest.getGeometry().getLocalTranslation().x) {
-                    
-                        //add code for placing block on X side of last block
+                    if (cord[0] > closest.getGeometry().getLocalTranslation().x) {
                         
-                    } else if (cord[1] > closest.getGeometry().getLocalTranslation().y
-                            || cord[1] < closest.getGeometry().getLocalTranslation().y) {
-                    
-                        //add code for placing block on Y side of last block
+                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x + 1f, closest.getGeometry().getLocalTranslation().y, closest.getGeometry().getLocalTranslation().z};
+                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        testShip.addBlock(cube2.getGeom());
+                        testShip.updateShip();
+                    } else if (cord[0] < closest.getGeometry().getLocalTranslation().x) {
                         
-                    }else if (cord[2] > closest.getGeometry().getLocalTranslation().z 
-                            || cord[2] < closest.getGeometry().getLocalTranslation().z ){
-                        
-                        //add cod for placing block on Z side of last block
-                    }
-                    
+                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x - 1f, closest.getGeometry().getLocalTranslation().y, closest.getGeometry().getLocalTranslation().z};
+                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        testShip.addBlock(cube2.getGeom());
+                        testShip.updateShip();
 
-                    // Let's interact - we mark the hit with a red dot.
-                    basicCube cube2 = new basicCube(cord, ColorRGBA.randomColor(), assetManager);
-                    testShip.addBlock(cube2.getGeom());
-                    testShip.updateShip();
+                    } else if (cord[1] > closest.getGeometry().getLocalTranslation().y) {
+                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x, closest.getGeometry().getLocalTranslation().y + 1f, closest.getGeometry().getLocalTranslation().z};
+                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        testShip.addBlock(cube2.getGeom());
+                        testShip.updateShip();
+
+                    } else if (cord[1] < closest.getGeometry().getLocalTranslation().y) {
+                        
+                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x, closest.getGeometry().getLocalTranslation().y - 1f, closest.getGeometry().getLocalTranslation().z};
+                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        testShip.addBlock(cube2.getGeom());
+                        testShip.updateShip();
+
+                    } else if (cord[2] > closest.getGeometry().getLocalTranslation().z) {
+                        
+                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x , closest.getGeometry().getLocalTranslation().y , closest.getGeometry().getLocalTranslation().z + 1f}; 
+                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        testShip.addBlock(cube2.getGeom());
+                        testShip.updateShip();
+                    } else if (cord[2] < closest.getGeometry().getLocalTranslation().z) {
+                        
+                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x , closest.getGeometry().getLocalTranslation().y , closest.getGeometry().getLocalTranslation().z - 1f}; 
+                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        testShip.addBlock(cube2.getGeom());
+                        testShip.updateShip();
+                    }
+                    /*
+                     basicCube cube2 = new basicCube(cord, ColorRGBA.randomColor(), assetManager);
+                     testShip.addBlock(cube2.getGeom());
+                     testShip.updateShip();
+                     */
                 } else {
                 }
             }
