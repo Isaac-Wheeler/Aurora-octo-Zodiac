@@ -63,4 +63,9 @@ public class ship {
         Vector3f v = pivot.getLocalTranslation();
         pivot.move(v.x , v.y, v.z + value * speed);
     }
+    
+    public void moveBack(float speed, float value){
+        Vector3f v = pivot.getLocalTranslation();
+        pivot.move(v.x , v.y, v.z - value * speed);
+    }
 }

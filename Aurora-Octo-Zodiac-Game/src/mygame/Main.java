@@ -3,6 +3,7 @@ package mygame;
 import com.jme3.renderer.RenderManager;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
@@ -62,7 +63,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
+        boundingBoxMove();
     }
 
     @Override
@@ -120,6 +121,7 @@ public class Main extends SimpleApplication {
                 settings.getWidth() / 2 - ch.getLineWidth() / 2, settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
     }
+    
     /**
      * Defining the "Shoot" action: Determine what was hit and how to respond.
      */
@@ -149,53 +151,108 @@ public class Main extends SimpleApplication {
                     Vector3f cords = closest.getContactPoint();
                     float[] cord = {cords.x, cords.y, cords.z};
                     //detects which side the block is on -Isaac
+                    
                     if (cord[0] > closest.getGeometry().getLocalTranslation().x) {
-                        
-                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x + 1f, closest.getGeometry().getLocalTranslation().y, closest.getGeometry().getLocalTranslation().z};
-                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        System.out.println("test X postive");
+                        float[] blockLocation = {
+                            closest.getGeometry().getLocalTranslation().x + 1f,
+                            closest.getGeometry().getLocalTranslation().y, 
+                            closest.getGeometry().getLocalTranslation().z
+                        };
+                        basicCube cube2 = new basicCube(blockLocation, 
+                                ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
-                    } else if (cord[0] < closest.getGeometry().getLocalTranslation().x) {
                         
-                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x - 1f, closest.getGeometry().getLocalTranslation().y, closest.getGeometry().getLocalTranslation().z};
-                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                    } else if (cord[0] < closest.getGeometry().getLocalTranslation().x) {
+                        System.out.println("Test X negitive");
+                        float[] blockLocation = {
+                            closest.getGeometry().getLocalTranslation().x - 1f,
+                            closest.getGeometry().getLocalTranslation().y,
+                            closest.getGeometry().getLocalTranslation().z
+                        };
+                        basicCube cube2 = new basicCube(blockLocation,
+                                ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
 
                     } else if (cord[1] > closest.getGeometry().getLocalTranslation().y) {
-                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x, closest.getGeometry().getLocalTranslation().y + 1f, closest.getGeometry().getLocalTranslation().z};
-                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        System.out.println("Text Y postive");
+                        float[] blockLocation = {
+                            closest.getGeometry().getLocalTranslation().x, 
+                            closest.getGeometry().getLocalTranslation().y + 1f,
+                            closest.getGeometry().getLocalTranslation().z
+                        };
+                        basicCube cube2 = new basicCube(blockLocation,
+                                ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
 
                     } else if (cord[1] < closest.getGeometry().getLocalTranslation().y) {
-                        
-                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x, closest.getGeometry().getLocalTranslation().y - 1f, closest.getGeometry().getLocalTranslation().z};
-                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        System.out.println("Test Y negitive");
+                        float[] blockLocation = {
+                            closest.getGeometry().getLocalTranslation().x,
+                            closest.getGeometry().getLocalTranslation().y - 1f,
+                            closest.getGeometry().getLocalTranslation().z
+                        };
+                        basicCube cube2 = new basicCube(blockLocation, 
+                                ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
 
+                        //not fireing;
                     } else if (cord[2] > closest.getGeometry().getLocalTranslation().z) {
-                        
-                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x , closest.getGeometry().getLocalTranslation().y , closest.getGeometry().getLocalTranslation().z + 1f}; 
-                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        System.out.println("test Z postive");
+                        float[] blockLocation = {
+                            closest.getGeometry().getLocalTranslation().x ,
+                            closest.getGeometry().getLocalTranslation().y ,
+                            closest.getGeometry().getLocalTranslation().z + 1f
+                        }; 
+                        basicCube cube2 = new basicCube(blockLocation, 
+                                ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
                     } else if (cord[2] < closest.getGeometry().getLocalTranslation().z) {
-                        
-                        float[] blockLocation = {closest.getGeometry().getLocalTranslation().x , closest.getGeometry().getLocalTranslation().y , closest.getGeometry().getLocalTranslation().z - 1f}; 
-                        basicCube cube2 = new basicCube(blockLocation, ColorRGBA.randomColor(), assetManager);
+                        System.out.println("Test Z negitive");
+                        float[] blockLocation = {
+                            closest.getGeometry().getLocalTranslation().x ,
+                            closest.getGeometry().getLocalTranslation().y ,
+                            closest.getGeometry().getLocalTranslation().z - 1f
+                        }; 
+                        basicCube cube2 = new basicCube(blockLocation, 
+                                ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
                     }
-                    /*
-                     basicCube cube2 = new basicCube(cord, ColorRGBA.randomColor(), assetManager);
-                     testShip.addBlock(cube2.getGeom());
-                     testShip.updateShip();
-                     */
                 } else {
+                    //Currently Does nothing -Isaac
                 }
             }
         }
     };
+    
+    private void boundingBoxMove(){
+        boundingBox boundingBox = new boundingBox(new Vector3f(100.0f, 100.0f, 100.0f),ColorRGBA.BlackNoAlpha, assetManager);
+        // 1. Reset results list.
+                CollisionResults results = new CollisionResults();
+                // 2. Aim the ray from cam loc to cam direction.
+                Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+                // 3. Collect intersections between Ray and Shootables in results list.
+                testShip.getPivot().collideWith(ray, results);
+                // 4. Print the results
+                System.out.println("----- Collisions? " + results.size() + "-----");
+                for (int i = 0; i < results.size(); i++) {
+                    // For each hit, we know distance, impact point, name of geometry.
+                    float dist = results.getCollision(i).getDistance();
+                    Vector3f pt = results.getCollision(i).getContactPoint();
+                    String hit = results.getCollision(i).getGeometry().getName();
+                    System.out.println("* Collision #" + i);
+                    System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+                }
+                if (results.size() > 0) {
+                    // The closest collision point is what was truly hit:
+                    CollisionResult closest = results.getClosestCollision();
+                    boundingBox.updateLocation(closest.getGeometry().getLocalTranslation()); 
+                }
+    }
 }
