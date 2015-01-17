@@ -166,6 +166,15 @@ public class Main extends SimpleApplication {
                     boolean xAxis = false, yAxis = false, zAxis = false;
                     
                     //TODO: Add method of working out which diff is the higest
+                    if(cordDiff[0]>cordDiff[1] && cordDiff[1]>cordDiff[2]){
+                        xAxis = true;
+                    }
+                    if(cordDiff[1]>cordDiff[0] && cordDiff[0]>cordDiff[2]){
+                        yAxis = true;
+                    }
+                    if(cordDiff[2]>cordDiff[1] && cordDiff[1]>cordDiff[0]){
+                        zAxis = true;
+                    }
                     
                     if(xAxis){
                         if (cordSet1[0] > closest.getGeometry().getLocalTranslation().x) {
