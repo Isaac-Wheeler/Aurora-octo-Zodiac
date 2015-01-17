@@ -166,13 +166,16 @@ public class Main extends SimpleApplication {
                     boolean xAxis = false, yAxis = false, zAxis = false;
                     
                     //TODO: Add method of working out which diff is the higest
-                    if(cordDiff[0]>cordDiff[1] && cordDiff[1]>cordDiff[2]){
+                    
+                    for(int i = 0; i<3; i++){
+                        System.out.println(cordDiff[i] + " num : id " + i );
+                    }
+                    
+                    if(cordDiff[0]>cordDiff[1] && cordDiff[0]>cordDiff[2]){
                         xAxis = true;
-                    }
-                    if(cordDiff[1]>cordDiff[0] && cordDiff[0]>cordDiff[2]){
+                    }else if(cordDiff[1]>cordDiff[0] && cordDiff[1]>cordDiff[2]){
                         yAxis = true;
-                    }
-                    if(cordDiff[2]>cordDiff[1] && cordDiff[1]>cordDiff[0]){
+                    }else if(cordDiff[2]>cordDiff[0] && cordDiff[2]>cordDiff[1]){
                         zAxis = true;
                     }
                     
