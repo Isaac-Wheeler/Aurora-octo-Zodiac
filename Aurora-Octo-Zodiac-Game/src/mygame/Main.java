@@ -58,12 +58,13 @@ public class Main extends SimpleApplication {
 
         testShip.updateShip();
 
+        flyCam.setMoveSpeed(50);
+
         initKeys();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        
     }
 
     @Override
@@ -83,9 +84,10 @@ public class Main extends SimpleApplication {
         // Add the names to the action listener.
         inputManager.addListener(analogListener, "Left", "Right", "Rotate");
         inputManager.addMapping("Shoot",
-                new KeyTrigger(KeyInput.KEY_SPACE), // trigger 1: spacebar
-                new MouseButtonTrigger(MouseInput.BUTTON_LEFT)); // trigger 2: left-button click
-        inputManager.addListener(actionListener, "Shoot");
+                new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping("Shoot",
+                new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        inputManager.addListener(actionListener, "Shoot", "Remove");
     }
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
@@ -94,13 +96,13 @@ public class Main extends SimpleApplication {
                     testShip.rotateShip(0, value * speed, 0);
                 }
                 if (name.equals("Right")) {
-                    testShip.moveRight(speed, value);
+                    testShip.moveRight(speed, 5);
                 }
                 if (name.equals("Left")) {
-                    testShip.moveLeft(speed, value);
+                    testShip.moveLeft(speed, 5);
                 }
                 if (name.equals("Forward")) {
-                    testShip.moveForward(speed, value);
+                    testShip.moveForward(speed, 5);
                 }
             } else {
                 System.out.println("Press P to unpause.");
@@ -149,38 +151,65 @@ public class Main extends SimpleApplication {
                     CollisionResult closest = results.getCollision(0);
                     Vector3f cords = closest.getContactPoint();
                     float[] cordSet1 = {cords.x, cords.y, cords.z};
-                    // Second Collision or back side of what we hit
-                    CollisionResult closest2 = results.getCollision(1);
-                    Vector3f cords2 = closest2.getContactPoint();
-                    float[] cordSet2 = {cords2.x, cords2.y, cords2.z};
+                    Vector3f cordCenter = closest.getGeometry().getLocalTranslation();
+                    float[] cordCenterArray = {cordCenter.x, cordCenter.y, cordCenter.z};
+
                     // Diffrence's betwen the two cords
                     float[] cordDiff = new float[3];
-                    
-                    for(int i = 0; i < 3; i++){
-                    cordDiff[i] = cordSet1[i] - cordSet2[i];
-                    if(cordDiff[i] < 0){
-                        cordDiff[i] = cordSet2[i] - cordSet2[i];
+
+                    for (int i = 0; i < 3; i++) {
+                        cordDiff[i] = cordCenterArray[i] - cordSet1[i];
                     }
-                    }
-                    
-                    boolean xAxis = false, yAxis = false, zAxis = false;
-                    
+
+                    boolean xAxisPositive = false, yAxisPositive = false, zAxisPositive = false, xAxisNegtive = false, yAxisNegtive = false, zAxisNegtive = false;
+
                     //TODO: Add method of working out which diff is the higest
-                    
-                    for(int i = 0; i<3; i++){
-                        System.out.println(cordDiff[i] + " num : id " + i );
+
+                    System.out.println("Diff");
+                    for (int i = 0; i < 3; i++) {
+                        System.out.println(cordDiff[i] + " num : id " + i);
                     }
-                    
-                    if(cordDiff[0]>cordDiff[1] && cordDiff[0]>cordDiff[2]){
-                        xAxis = true;
-                    }else if(cordDiff[1]>cordDiff[0] && cordDiff[1]>cordDiff[2]){
-                        yAxis = true;
-                    }else if(cordDiff[2]>cordDiff[0] && cordDiff[2]>cordDiff[1]){
-                        zAxis = true;
+
+                    System.out.println("Center");
+
+                    for (int i = 0; i < 3; i++) {
+                        System.out.println(cordCenterArray[i] + " num : id " + i);
                     }
-                    
-                    if(xAxis){
-                        if (cordSet1[0] > closest.getGeometry().getLocalTranslation().x) {
+
+                    if (cordDiff[0] < 0) {
+                        if (Math.abs(cordDiff[0]) > Math.abs(cordDiff[1]) && Math.abs(cordDiff[0]) > Math.abs(cordDiff[2])) {
+                            xAxisPositive = true;
+                        }
+                    }
+                    if (cordDiff[0] > 0) {
+                        if (Math.abs(cordDiff[0]) > Math.abs(cordDiff[1]) && Math.abs(cordDiff[0]) > Math.abs(cordDiff[2])) {
+                            xAxisNegtive = true;
+                        }
+                    }
+                    if (cordDiff[1] < 0) {
+                        if (Math.abs(cordDiff[1]) > Math.abs(cordDiff[0]) && Math.abs(cordDiff[1]) > Math.abs(cordDiff[2])) {
+                            yAxisPositive = true;
+                        }
+                    }
+                    if (cordDiff[1] > 0) {
+                        if (Math.abs(cordDiff[1]) > Math.abs(cordDiff[0]) && Math.abs(cordDiff[1]) > Math.abs(cordDiff[2])) {
+                            yAxisNegtive = true;
+                        }
+                    }
+                    if (cordDiff[2] < 0) {
+                        if (Math.abs(cordDiff[2]) > Math.abs(cordDiff[0]) && Math.abs(cordDiff[2]) > Math.abs(cordDiff[1])) {
+                            zAxisPositive = true;
+                        }
+                    }
+                    if (cordDiff[2] > 0) {
+                        if (Math.abs(cordDiff[2]) > Math.abs(cordDiff[0]) && Math.abs(cordDiff[2]) > Math.abs(cordDiff[1])) {
+                            zAxisNegtive = true;
+                        }
+                    }
+
+
+
+                    if (xAxisPositive) {
                         System.out.println("test X postive");
                         float[] blockLocation = {
                             closest.getGeometry().getLocalTranslation().x + 1f,
@@ -192,7 +221,7 @@ public class Main extends SimpleApplication {
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
 
-                    } else if (cordSet1[0] < closest.getGeometry().getLocalTranslation().x) {
+                    } else if (xAxisNegtive) {
                         System.out.println("Test X negitive");
                         float[] blockLocation = {
                             closest.getGeometry().getLocalTranslation().x - 1f,
@@ -204,10 +233,8 @@ public class Main extends SimpleApplication {
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
 
-                    }
-                    }
-                    if(yAxis){
-                        if (cordSet1[1] > closest.getGeometry().getLocalTranslation().y) {
+                    } else if (yAxisPositive) {
+
                         System.out.println("Text Y postive");
                         float[] blockLocation = {
                             closest.getGeometry().getLocalTranslation().x,
@@ -219,7 +246,7 @@ public class Main extends SimpleApplication {
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
 
-                    } else if (cordSet1[1] < closest.getGeometry().getLocalTranslation().y) {
+                    } else if (yAxisNegtive) {
                         System.out.println("Test Y negitive");
                         float[] blockLocation = {
                             closest.getGeometry().getLocalTranslation().x,
@@ -230,10 +257,10 @@ public class Main extends SimpleApplication {
                                 ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
+
                     }
-                    }
-                    if(zAxis){
-                        if (cordSet1[2] > closest.getGeometry().getLocalTranslation().z) {
+                    if (zAxisPositive) {
+
                         System.out.println("test Z postive");
                         float[] blockLocation = {
                             closest.getGeometry().getLocalTranslation().x,
@@ -244,7 +271,7 @@ public class Main extends SimpleApplication {
                                 ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
-                    } else if (cordSet1[2] < closest.getGeometry().getLocalTranslation().z) {
+                    } else if (zAxisNegtive) {
                         System.out.println("Test Z negitive");
                         float[] blockLocation = {
                             closest.getGeometry().getLocalTranslation().x,
@@ -255,10 +282,35 @@ public class Main extends SimpleApplication {
                                 ColorRGBA.randomColor(), assetManager);
                         testShip.addBlock(cube2.getGeom());
                         testShip.updateShip();
+
                     }
-                    }
-                    
+
                 }
+            }
+            if(name.equals("Remove")  && !keyPressed){
+                 // 1. Reset results list.
+                CollisionResults results = new CollisionResults();
+                // 2. Aim the ray from cam loc to cam direction.
+                Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+                // 3. Collect intersections between Ray and Shootables in results list.
+                testShip.getPivot().collideWith(ray, results);
+                // 4. Print the results
+                System.out.println("----- Collisions? " + results.size() + "-----");
+                for (int i = 0; i < results.size(); i++) {
+                    // For each hit, we know distance, impact point, name of geometry.
+                    float dist = results.getCollision(i).getDistance();
+                    Vector3f pt = results.getCollision(i).getContactPoint();
+                    String hit = results.getCollision(i).getGeometry().getName();
+                    System.out.println("* Collision #" + i);
+                    System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+                }
+                // 5. Use the results (we mark the hit object)
+                if (results.size() > 0) {
+                    // First Collision or front side of what we hit
+                    CollisionResult closest = results.getClosestCollision();
+                    testShip.removeBlock(closest.getGeometry());
+                }
+
             }
         }
     };

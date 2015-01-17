@@ -61,28 +61,49 @@ public class ship {
             shipBlocks.add(block);
         }
     }
+    
+    public void removeBlock(Geometry block) {
+           if (shipBlocks.size() > 0) {
+            for (int i = 0; i < shipBlocks.size(); i++) {
+                
+                Geometry temp = shipBlocks.get(i);
+                
+                if (temp.getLocalTranslation().equals(block.getLocalTranslation())) {
+                    shipBlocks.remove(i);
+                    block.removeFromParent();
+                }
+            }
+        } else {
+            
+        }
+    }
 
     public void rotateShip(float x, float y, float z) {
         pivot.rotate(x, y, z);
+        
     }
 
     public void moveRight(float speed, float value) {
         Vector3f v = pivot.getLocalTranslation();
         pivot.move(v.x + value, v.y, v.z);
+        updateShip();
     }
 
     public void moveLeft(float speed, float value) {
         Vector3f v = pivot.getLocalTranslation();
         pivot.move(v.x - value, v.y, v.z);
+        updateShip();
     }
 
     public void moveForward(float speed, float value) {
         Vector3f v = pivot.getLocalTranslation();
         pivot.move(v.x, v.y, v.z + value * speed);
+        updateShip();
     }
 
     public void moveBack(float speed, float value) {
         Vector3f v = pivot.getLocalTranslation();
         pivot.move(v.x, v.y, v.z - value * speed);
+        updateShip();
     }
 }
